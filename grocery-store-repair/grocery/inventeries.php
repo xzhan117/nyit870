@@ -117,11 +117,11 @@ else
         ?>
           <tr>
             <td><?php echo $i; ?></td>
-            <td><?php echo $row['category_name']; ?></td>
-            <td><?php echo $row['unit']; ?></td>
-            <td><?php echo $row['price']; ?></td>
-            <td><?php echo $row['supplier']; ?></td>
-            <td><?php echo $row['company']; ?></td>
+            <td><?php echo htmlspecialchars($row['category_name'], ENT_QUOTES, 'UTF-8'); ?></td>
+            <td><?php echo htmlspecialchars($row['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
+            <td><?php echo htmlspecialchars($row['price'], ENT_QUOTES, 'UTF-8'); ?></td>
+            <td><?php echo htmlspecialchars($row['supplier'], ENT_QUOTES, 'UTF-8'); ?></td>
+            <td><?php echo htmlspecialchars($row['company'], ENT_QUOTES, 'UTF-8'); ?></td>
             <?php 
             if (!empty($_SESSION['bill'])) 
             {
