@@ -39,31 +39,42 @@
 </body>
 </html>
 
-<?php 
-
+<?php
 if (isset($_POST['login'])) 
 {
-	$user = $_POST['email'];
+    $user = $_POST['email'];
     $pass = $_POST['password'];
-    $con = new mysqli('localhost','grocery','qwer123','grocery');
+    $con = new mysqli('localhost', 'grocery', 'qwer123', 'grocery');
 
-    $result = $con->query("select * from users where email='$user' AND password='$pass'");
-    if($result->num_rows>0)
-    {	
-    	session_start();
-    	$data = $result->fetch_assoc();
-    	$_SESSION['userId']=$data['id'];
-      $_SESSION['bill'] = array();
-    	header('location:index.php');
-      }
-    else
-    {
-     	echo 
-     	"<script>
-     		\$(document).ready(function(){\$('#error').slideDown().html('Login Error! Try again.').delay(3000).fadeOut();});
-     	</script>
-     	";
+    $stmt = $con->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->bind_param("s", $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+      
+        $data = $result->fetch_assoc();
+
+        if (password_verify($pass, $data['password'])) {
+            session_start();
+            $_SESSION['userId'] = $data['id'];
+            $_SESSION['bill'] = array();
+            header('location:index.php');
+            exit();
+        } else {
+            echo 
+            "<script>
+                \$(document).ready(function() { \$('#error').slideDown().html('Login Error! Try again.').delay(3000).fadeOut(); });
+            </script>";
+        }
+    } else {
+        echo 
+        "<script>
+            \$(document).ready(function() { \$('#error').slideDown().html('Login Error! Try again.').delay(3000).fadeOut(); });
+        </script>";
     }
-}
 
- ?>
+    $stmt->close();
+    $con->close();
+}
+?>

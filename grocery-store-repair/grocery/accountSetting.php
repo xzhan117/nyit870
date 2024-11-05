@@ -20,8 +20,11 @@ if(!isset($_SESSION['userId']))
 <?php 
 $notice = "";
 if (isset($_POST['saveSetting'])) {
+  $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
   $stmt = $con->prepare("UPDATE users SET email = ?, password = ? WHERE id = ?");
-  $stmt->bind_param("ssi", $_POST['email'], $_POST['password'], $_SESSION['userId']);
+  $stmt->bind_param("ssi", $_POST['email'], $hashedPassword, $_SESSION['userId']);
+
   if ($stmt->execute()) {
     $notice = "<div class='alert alert-success'>Successfully Saved</div>";
     header("Location: accountSetting.php?notice=Successfully saved");
