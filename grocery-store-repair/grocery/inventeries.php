@@ -89,6 +89,18 @@ else
   $catName = "All Inventeries";
   $stockArray = $con->query("select inventeries.*, categories.name as category_name from inventeries join categories on inventeries.catId=categories.id");
 }
+
+$encryption_key = 'nyit870';
+
+function decryptData($data, $key) {
+    $cipher = "aes-256-cbc";
+    $data = base64_decode($data);
+    $ivlen = openssl_cipher_iv_length($cipher);
+    $iv = substr($data, 0, $ivlen);
+    $encrypted = substr($data, $ivlen);
+    return openssl_decrypt($encrypted, $cipher, $key, 0, $iv);
+}
+
   include 'assets/bill.php';
  ?>
   <div class="content">
@@ -114,6 +126,8 @@ else
         { 
           $i=$i+1;
           $id = $row['id'];
+          
+          $decrypted_company = decryptData($row['company'], $encryption_key);
         ?>
           <tr>
             <td><?php echo $i; ?></td>
@@ -121,7 +135,7 @@ else
             <td><?php echo htmlspecialchars($row['unit'], ENT_QUOTES, 'UTF-8'); ?></td>
             <td><?php echo htmlspecialchars($row['price'], ENT_QUOTES, 'UTF-8'); ?></td>
             <td><?php echo htmlspecialchars($row['supplier'], ENT_QUOTES, 'UTF-8'); ?></td>
-            <td><?php echo htmlspecialchars($row['company'], ENT_QUOTES, 'UTF-8'); ?></td>
+            <td><?php echo htmlspecialchars($decrypted_company, ENT_QUOTES, 'UTF-8'); ?></td>
             <?php 
             if (!empty($_SESSION['bill'])) 
             {

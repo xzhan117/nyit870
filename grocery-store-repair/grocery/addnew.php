@@ -76,8 +76,21 @@ if (isset($_POST['saveProduct'])) {
     $price = filter_var($_POST['price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     $company = filter_var($_POST['company'], FILTER_SANITIZE_STRING);
 
+    $encryption_key = 'nyit870';
+
+    function encryptData($data, $key) {
+        $cipher = "aes-256-cbc";
+        $ivlen = openssl_cipher_iv_length($cipher);
+        $iv = openssl_random_pseudo_bytes($ivlen);
+        $encrypted = openssl_encrypt($data, $cipher, $key, 0, $iv);
+        return base64_encode($iv . $encrypted);
+    }
+
+    $encrypted_company = encryptData($company, $encryption_key);
+
     $stmt = $con->prepare("INSERT INTO inventeries (catId, supplier, unit, price, company) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issds", $catId, $supplier, $unit, $price, $company);
+    $stmt->bind_param("issds", $catId, $supplier, $unit, $price, $encrypted_company);
+    
     if ($stmt->execute()) {
         $notice = "<div class='alert alert-success'>Successfully Saved</div>";
     } else {
