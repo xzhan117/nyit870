@@ -56,8 +56,8 @@ CREATE TABLE `inventeries` (
   `catId` int(11) NOT NULL,
   `unit` text NOT NULL,
   `price` float(24) NOT NULL,
-  `supplier` varchar(222) NOT NULL,
-  `company` varchar(111) NOT NULL,
+  `supplier` varchar(111) NOT NULL,
+  `company` varchar(333) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -147,7 +147,7 @@ INSERT INTO `sold` (`id`, `name`, `contact`, `discount`, `item`, `amount`, `user
 
 CREATE TABLE `supplier` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL,
+  `name` varchar(111) NOT NULL,
   `number` text NOT NULL,
   `address` text NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
