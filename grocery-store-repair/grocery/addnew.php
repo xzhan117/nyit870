@@ -71,7 +71,7 @@ if(!isset($_SESSION['userId']))
 </div>
 <?php
 if (isset($_POST['saveProduct'])) {
-    $catId = $_POST[catId]
+    $catId = $_POST[catId];
     $supplier = filter_var($_POST['supplier'], FILTER_SANITIZE_STRING);
     $unit = filter_var($_POST['unit'], FILTER_SANITIZE_STRING);
     $price = filter_var($_POST['price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
